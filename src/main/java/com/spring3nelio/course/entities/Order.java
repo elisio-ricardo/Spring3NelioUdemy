@@ -2,12 +2,12 @@ package com.spring3nelio.course.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.spring3nelio.course.entities.enums.OrdersStatus;
-import com.spring3nelio.course.service.OrderService;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -31,7 +31,7 @@ public class Order implements Serializable {
 
 
     @OneToMany(mappedBy = "id.order")
-    private Set<OrderItem> item = new HashSet<>();
+    private Set<OrderItem> items = new HashSet<>();
 
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
@@ -81,8 +81,8 @@ public class Order implements Serializable {
         this.client = client;
     }
 
-    public Set<OrderItem> getItem() {
-        return item;
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     public Payment getPayment() {
@@ -91,5 +91,26 @@ public class Order implements Serializable {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Double getTotal() {
+        double sum = 0.0;
+        for (OrderItem x : items) {
+            sum += x.getSubTotal();
+        }
+        return sum;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
