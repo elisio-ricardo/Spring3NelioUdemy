@@ -1,5 +1,6 @@
 package com.spring3nelio.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring3nelio.course.entities.pk.OrderItemPK;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ public class OrderItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
 
@@ -32,6 +33,7 @@ public class OrderItem implements Serializable {
         id.setProduct(product);
     }
 
+    @JsonIgnore//para não acontecer chamada ciclica e entrar em loop
     public Order getOrder() {
         return id.getOrder();
     }
