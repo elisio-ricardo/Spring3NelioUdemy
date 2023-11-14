@@ -33,7 +33,7 @@ public class OrderItem implements Serializable {
         id.setProduct(product);
     }
 
-    @JsonIgnore//para não acontecer chamada ciclica e entrar em loop
+
     public Order getOrder() {
         return id.getOrder();
     }
