@@ -3,6 +3,7 @@ package com.spring3nelio.course.service;
 
 import com.spring3nelio.course.entities.User;
 import com.spring3nelio.course.repositories.UserRepository;
+import com.spring3nelio.course.service.excption.ResourceNotFoundExcption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class UserService {
     public User findById(Long id) {
         Optional<User> user = repository.findById(id);
 
-        return user.get();
+        return user.orElseThrow(() -> new ResourceNotFoundExcption(id));
     }
 
     public User insert(User obj) {
