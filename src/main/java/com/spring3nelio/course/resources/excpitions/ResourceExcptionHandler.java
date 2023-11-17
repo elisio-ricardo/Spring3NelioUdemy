@@ -25,4 +25,17 @@ public class ResourceExcptionHandler implements Serializable {
     }
 
 
+
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<StandardError> dataBaseException(DataBaseException e, HttpServletRequest request) {
+        String error = "DataBase error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }
+
+
+
+
 }

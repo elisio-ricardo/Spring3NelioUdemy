@@ -3,12 +3,16 @@ package com.spring3nelio.course.service;
 
 import com.spring3nelio.course.entities.User;
 import com.spring3nelio.course.repositories.UserRepository;
+import com.spring3nelio.course.resources.excpitions.DataBaseException;
 import com.spring3nelio.course.service.excption.ResourceNotFoundExcption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -31,7 +35,13 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundExcption(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException(e.getMessage());
+        }
     }
 
     public User update(Long id, User obj) {
